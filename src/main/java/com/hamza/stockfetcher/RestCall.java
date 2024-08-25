@@ -4,15 +4,24 @@ import org.springframework.web.client.RestClient;
 
 public class RestCall {
 
-    private String uriBase = "https://api-business.asharqbusiness.com/api/currencies/chart-data/";
-    private String duration = "/5years";
-    private RestClient restClient = RestClient.create();
+    private final String uriBase = "https://api-business.asharqbusiness.com/api/currencies/chart-data/";
+    private final String duration = "/5years";
+    private final RestClient restClient = RestClient.create();
 
     public Stock getStock(String typeId) {
 
-        return restClient.get()
+        System.out.println("fetching " + typeId + " stock prices...");
+
+        Stock stock = restClient.get()
                 .uri(uriBase + typeId + duration)
                 .retrieve().body(Stock.class);
+
+        if(stock == null)
+            System.out.println("fetched " + typeId +" NULL");
+        else
+            System.out.println("fetched " + typeId +" counts: "+ stock.getPrices().size());
+
+        return stock;
 
     }
 

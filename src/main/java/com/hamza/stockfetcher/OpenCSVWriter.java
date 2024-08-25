@@ -19,23 +19,28 @@ public class OpenCSVWriter {
             // Write header
             writer.writeNext(header);
 
-            // Write data
-            for(int i=0; i<60; i++) {
+            System.out.println("Started writing data to file...");
 
-                String[] res = new String[(data.size()*2)];
-                int counter = 0;
+            // Write data
+            for(int i=0; i<data.get(0).size(); i++) {
+
+                String[] res = new String[(data.size()+1)];
+
+                String formattedDate = dateFormat.format(new Date(data.get(0).get(i).getDate()));
+                res[0] = formattedDate;
+
+                int counter = 1;
 
                 for(List<PricePoint> pointList : data) {
-                    String formattedDate = dateFormat.format(new Date(pointList.get(i).getDate()));
 
-                    res[counter] = formattedDate;
-                    res[counter+1] = String.valueOf(pointList.get(i).getPrice());
-                    counter = counter+2;
-
+                    res[counter] = String.valueOf(pointList.get(i).getPrice());
+                    counter++;
                 }
 
                 writer.writeNext(res);
             }
+
+            System.out.println("Data written to file successfully.");
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
